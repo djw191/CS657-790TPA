@@ -6,6 +6,13 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static java.util.concurrent.TimeUnit.*;
 
+/**
+ * Particle App Program: Creates multiple "particles," each assigned to its own thread.  The particles randomly change
+ * their position, and a canvas updates their visual position when asked by the particle.  The particles are managed by
+ * a scheduled executor service.
+ *
+ * @author Derek Woodard
+ */
 public class ParticleApp {
     private static final int SIZE = 768;
     private static final int THREAD_COUNT = 200;
@@ -13,7 +20,7 @@ public class ParticleApp {
     private static final ParticlePanel panel = new ParticlePanel(SIZE);
     private static final JFrame jFrame = new JFrame("Particle App");
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         // JFrame initializes here, adds the canvas, sets the size, makes it visible, and has it close the application if you close the window
         jFrame.add(panel);
         jFrame.setSize(SIZE, SIZE);
@@ -28,13 +35,15 @@ public class ParticleApp {
         panel.setParticles(particles);
 
         System.out.println("Hit \"Enter\" to exit program");
-        System.in.read();
+        try { System.in.read(); } catch (IOException ignored) {  }
         stop();
     }
 
-    // Not useful unless we want to be able to kill all the threads at any point from the threads?
+    /**
+     * Stops threads, and closes JFrame window
+     */
     public static synchronized void stop(){
-        scheduler.shutdownNow();
-        jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
+        scheduler.shutdownNow(); //Stop Threads
+        jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //Ask JFrame to close
     }
 }

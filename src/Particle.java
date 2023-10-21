@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
+/**
+ * Object which hold's it's position, as well as functions required to move it, and to draw it on a canvas.
+ */
 public class Particle {
     protected int x, y;
     protected final Random rng = new Random();
@@ -18,16 +21,40 @@ public class Particle {
         img = timg;
     }
 
+    /**
+     * @param x Initial X Coordinate on Canvas
+     * @param y Initial Y Coordinate on Canvas
+     */
     public Particle(int x, int y){
         this.x = x;
         this.y = y;
     }
 
-    public synchronized void move(){
-        x += rng.nextInt(11) - 5;
-        y += rng.nextInt(21) - 10;
+    /**
+     * Moves the particle by a set amount
+     *
+     * @param x Range to move particle horizontally (+/- x)
+     * @param y Range to move particle vertically (+/- y)
+     */
+    public synchronized void move(int x, int y){
+        x += rng.nextInt(x * 2 + 1) - x;
+        y += rng.nextInt(y * 2 + 1) - y;
     }
 
+    /**
+     * Moves the particle by a random amount (Default Range +/- 5 horizontally, +/- 10 vertically)
+     */
+    public synchronized void move(){
+        move(5, 10);
+    }
+
+
+    /**
+     * Function intended to be called by the canvas when it's told to update.  Will draw the particle to the canvas,
+     * based on its current location.
+     *
+     * @param g Holds the Graphics object required to draw on
+     */
     public void draw(Graphics g){
         int lx, ly;
         synchronized (this) { lx = x; ly = y; }
