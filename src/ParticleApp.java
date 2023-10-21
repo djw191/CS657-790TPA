@@ -30,7 +30,7 @@ public class ParticleApp {
 
         Particle[] particles = new Particle[THREAD_COUNT];
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Particle tmp = particles[i] = new Particle(SIZE / 2, SIZE / 2);
+            Particle tmp = particles[i] = new Particle(rng.nextInt(SIZE), rng.nextInt(SIZE));
             scheduler.scheduleAtFixedRate(
                     () -> {
                         tmp.move(10, 10);
