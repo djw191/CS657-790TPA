@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -19,6 +20,7 @@ public class ParticleApp {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
     private static final ParticlePanel panel = new ParticlePanel(SIZE);
     private static final JFrame jFrame = new JFrame("Particle App");
+    private static final Random rng = new Random();
 
     public static void main(String[] args) {
         // JFrame initializes here, adds the canvas, sets the size, makes it visible, and has it close the application if you close the window
@@ -30,7 +32,9 @@ public class ParticleApp {
         Particle[] particles = new Particle[THREAD_COUNT];
         for(int i = 0; i < THREAD_COUNT; i++){
             Particle tmp = particles[i] = new Particle(SIZE/2, SIZE/2);
-            scheduler.scheduleAtFixedRate(() -> { tmp.move(); panel.repaint(); }, 0, 10, MILLISECONDS);
+            scheduler.scheduleAtFixedRate(
+                    () -> { tmp.move(10,10); panel.repaint(); },
+                    0, rng.nextInt(1,50), MILLISECONDS);
         }
         panel.setParticles(particles);
 
