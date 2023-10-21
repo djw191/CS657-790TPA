@@ -37,8 +37,8 @@ public class Particle {
      * @param y Range to move particle vertically (+/- y)
      */
     public synchronized void move(int x, int y){
-        x += rng.nextInt(x * 2 + 1) - x;
-        y += rng.nextInt(y * 2 + 1) - y;
+        this.x += rng.nextInt(x * 2 + 1) - x;
+        this.y += rng.nextInt(y * 2 + 1) - y;
     }
 
     /**
