@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-
 import static java.util.concurrent.TimeUnit.*;
 
 /**
@@ -30,23 +29,29 @@ public class ParticleApp {
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         Particle[] particles = new Particle[THREAD_COUNT];
-        for(int i = 0; i < THREAD_COUNT; i++){
-            Particle tmp = particles[i] = new Particle(SIZE/2, SIZE/2);
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            Particle tmp = particles[i] = new Particle(SIZE / 2, SIZE / 2);
             scheduler.scheduleAtFixedRate(
-                    () -> { tmp.move(10,10); panel.repaint(); },
-                    0, rng.nextInt(1,50), MILLISECONDS);
+                    () -> {
+                        tmp.move(10, 10);
+                        panel.repaint();
+                    },
+                    0, rng.nextInt(1, 50), MILLISECONDS);
         }
         panel.setParticles(particles);
 
         System.out.println("Hit \"Enter\" to exit program");
-        try { System.in.read(); } catch (IOException ignored) {  }
+        try {
+            System.in.read();
+        } catch (IOException ignored) {
+        }
         stop();
     }
 
     /**
      * Stops threads, and closes JFrame window
      */
-    public static synchronized void stop(){
+    public static synchronized void stop() {
         scheduler.shutdownNow(); //Stop Threads
         jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //Ask JFrame to close
     }
