@@ -14,8 +14,8 @@ import static java.util.concurrent.TimeUnit.*;
  * @author Derek Woodard
  */
 public class ParticleApp {
-    private static final int SIZE = 768;
-    private static final int THREAD_COUNT = 200;
+    private static final int SIZE = 1024;
+    private static final int THREAD_COUNT = 25;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
     private static final ParticlePanel panel = new ParticlePanel(SIZE);
     private static final JFrame jFrame = new JFrame("Particle App");
@@ -30,21 +30,20 @@ public class ParticleApp {
 
         Particle[] particles = new Particle[THREAD_COUNT];
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Particle tmp = particles[i] = new Particle(rng.nextInt(SIZE), rng.nextInt(SIZE));
+            Particle tmp = particles[i] = new Particle(SIZE/2, SIZE/2);
             scheduler.scheduleAtFixedRate(
                     () -> {
-                        tmp.move(10, 10);
+                        tmp.move(rng.nextInt(10, 21), rng.nextInt(10, 21));
                         panel.repaint();
                     },
-                    0, rng.nextInt(1, 50), MILLISECONDS);
+                    0, 1000/24 /*fps*/, MILLISECONDS);
         }
         panel.setParticles(particles);
 
         System.out.println("Hit \"Enter\" to exit program");
         try {
             System.in.read();
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) { }
         stop();
     }
 
