@@ -10,7 +10,6 @@ import java.util.Random;
  */
 public class Particle {
     final static BufferedImage img; //only necessary if we want images
-
     static {
         BufferedImage timg = null;
         try {
@@ -48,6 +47,7 @@ public class Particle {
     /**
      * Moves the particle by a random amount (Default Range +/- 5 horizontally, +/- 10 vertically)
      */
+    @SuppressWarnings("unused")
     public synchronized void move() {
         move(5, 10);
     }
