@@ -14,20 +14,21 @@ import static java.util.concurrent.TimeUnit.*;
  * @author Derek Woodard
  */
 public class ParticleApp {
-    private static final int SIZE = 768;
-    private static final int THREAD_COUNT = 200;
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
-    private static final ParticlePanel panel = new ParticlePanel(SIZE);
-    private static final JFrame jFrame = new JFrame("Particle App");
-    private static final Random rng = new Random();
+    private final int SIZE;
+    private final int THREAD_COUNT;
+    private final ScheduledExecutorService scheduler;
+    private final ParticlePanel panel;
+    private final JFrame jFrame = new JFrame("Particle App");
+    private final Random rng = new Random();
 
-    public static void main(String[] args) {
+    private void SetupJFrame(){
         // JFrame initializes here, adds the canvas, sets the size, makes it visible, and has it close the application if you close the window
         jFrame.add(panel);
         jFrame.setSize(SIZE, SIZE);
         jFrame.setVisible(true);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+    }
+    private void CreateAndStartThreads(){
         Particle[] particles = new Particle[THREAD_COUNT];
         for (int i = 0; i < THREAD_COUNT; i++) {
             Particle tmp = particles[i] = new Particle(rng.nextInt(SIZE), rng.nextInt(SIZE));
@@ -39,19 +40,31 @@ public class ParticleApp {
                     0, rng.nextInt(1, 50), MILLISECONDS);
         }
         panel.setParticles(particles);
-
+    }
+    public void Start(){
+        SetupJFrame();
+        CreateAndStartThreads();
+    }
+    public ParticleApp(int SIZE, int THREAD_COUNT){
+        this.SIZE = SIZE;
+        this.THREAD_COUNT = THREAD_COUNT;
+        scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
+        panel = new ParticlePanel(SIZE);
+    }
+    public static void main(String[] args) {
+        ParticleApp particleApp = new ParticleApp(1024, 128);
+        particleApp.Start();
         System.out.println("Hit \"Enter\" to exit program");
         try {
             System.in.read();
-        } catch (IOException ignored) {
-        }
-        stop();
+        } catch (IOException ignored) { }
+        particleApp.stop();
     }
 
     /**
      * Stops threads, and closes JFrame window
      */
-    public static synchronized void stop() {
+    public synchronized void stop() {
         scheduler.shutdownNow(); //Stop Threads
         jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //Ask JFrame to close
     }
