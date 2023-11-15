@@ -51,6 +51,11 @@ public class ParticleApp {
         scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
         panel = new ParticlePanel(SIZE);
     }
+
+    @SuppressWarnings("unused")
+    public ParticleApp(){
+        this(1024, 128);
+    }
     public static void main(String[] args) {
         ParticleApp particleApp = new ParticleApp(1024, 128);
         particleApp.Start();
