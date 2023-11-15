@@ -20,7 +20,12 @@ public class ParticleApp {
     private final ParticlePanel panel;
     private final JFrame jFrame = new JFrame("Particle App");
     private final Random rng = new Random();
-
+    public ParticleApp(int SIZE, int THREAD_COUNT){
+        this.SIZE = SIZE;
+        this.THREAD_COUNT = THREAD_COUNT;
+        scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
+        panel = new ParticlePanel(SIZE);
+    }
     private void SetupJFrame(){
         // JFrame initializes here, adds the canvas, sets the size, makes it visible, and has it close the application if you close the window
         jFrame.add(panel);
@@ -45,11 +50,12 @@ public class ParticleApp {
         SetupJFrame();
         CreateAndStartThreads();
     }
-    public ParticleApp(int SIZE, int THREAD_COUNT){
-        this.SIZE = SIZE;
-        this.THREAD_COUNT = THREAD_COUNT;
-        scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
-        panel = new ParticlePanel(SIZE);
+    /**
+     * Stops threads, and closes JFrame window
+     */
+    public synchronized void Stop() {
+        scheduler.shutdownNow(); //Stop Threads
+        jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //Ask JFrame to close
     }
 
     @SuppressWarnings("unused")
@@ -63,14 +69,6 @@ public class ParticleApp {
         try {
             System.in.read();
         } catch (IOException ignored) { }
-        particleApp.stop();
-    }
-
-    /**
-     * Stops threads, and closes JFrame window
-     */
-    public synchronized void stop() {
-        scheduler.shutdownNow(); //Stop Threads
-        jFrame.dispatchEvent(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING)); //Ask JFrame to close
+        particleApp.Stop();
     }
 }
