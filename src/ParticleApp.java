@@ -21,6 +21,8 @@ public class ParticleApp {
     private final JFrame jFrame = new JFrame("Particle App");
     private final Random rng = new Random();
     public ParticleApp(int SIZE, int THREAD_COUNT){
+        if(SIZE < 1 || THREAD_COUNT < 1)
+            throw new IllegalArgumentException("SIZE and THREAD_COUNT must be positive integers.");
         this.SIZE = SIZE;
         this.THREAD_COUNT = THREAD_COUNT;
         scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
