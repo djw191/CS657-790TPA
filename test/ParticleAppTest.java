@@ -126,11 +126,22 @@ public class ParticleAppTest {
                 "Draw method should execute without throwing exceptions");
     }
 
+    @Test
+    public void testParticlePaintMethod() {
+        ParticlePanel panel = new ParticlePanel(SIZE);
+        TestParticle[] testParticles = { new TestParticle(10, 10), new TestParticle(20, 20) };
+        panel.setParticles(testParticles);
+
+        Graphics image = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB).createGraphics();
+        panel.paint(image);
+
+        for (TestParticle particle : testParticles) {
+            assertTrue(particle.drawCalled, "draw should be called on each particle");
+        }
+    }
+
     @AfterEach
     public void tearDown(){
-        if (particleApp.jFrame != null) {
-            particleApp.jFrame.dispose();
-        }
         particleApp.Stop();
     }
 
@@ -148,6 +159,23 @@ public class ParticleAppTest {
         public void repaint() {
             repaintCalled = true;
             super.repaint();
+        }
+    }
+
+    /**
+     * Test class for Particle in lieu of setting up a mock environment.
+     */
+    private static class TestParticle extends Particle {
+        boolean drawCalled = false;
+
+        public TestParticle(int x, int y) {
+            super(x, y);
+        }
+
+        @Override
+        public void draw(Graphics g) {
+            drawCalled = true;
+            super.draw(g);
         }
     }
 }
