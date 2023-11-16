@@ -68,6 +68,21 @@ public class ParticleAppTest {
                 "ParticlePanel should be added to JFrame");
     }
 
+    @Test
+    public void testSetAndGetParticles() {
+        TestParticlePanel testParticlePanel = new TestParticlePanel(SIZE);
+        Particle[] testParticles = { new Particle(10, 10), new Particle(20, 20) };
+
+        testParticlePanel.setParticles(testParticles);
+        assertArrayEquals(testParticles, testParticlePanel.getParticles(), "getParticles should return the set array of particles");
+    }
+
+    @Test
+    public void testSetParticlesWithNull() {
+        TestParticlePanel testParticlePanel = new TestParticlePanel(SIZE);
+        assertThrows(IllegalArgumentException.class, () -> testParticlePanel.setParticles(null),
+                "setParticles should throw IllegalArgumentException when passed null");
+    }
 
     @Test
     public void testParticlePanelRepaintCalled() throws InterruptedException, InvocationTargetException {
