@@ -16,9 +16,9 @@ import static java.util.concurrent.TimeUnit.*;
 public class ParticleApp {
     private final int SIZE;
     private final int THREAD_COUNT;
-    private final ScheduledExecutorService scheduler;
-    private final ParticlePanel panel;
-    private final JFrame jFrame = new JFrame("Particle App");
+    final ScheduledExecutorService scheduler;
+    ParticlePanel panel;
+    final JFrame jFrame = new JFrame("Particle App");
     private final Random rng = new Random();
     public ParticleApp(int SIZE, int THREAD_COUNT){
         if(SIZE < 1 || THREAD_COUNT < 1)
@@ -28,7 +28,7 @@ public class ParticleApp {
         scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
         panel = new ParticlePanel(SIZE);
     }
-    private void SetupJFrame(){
+    void SetupJFrame(){
         // JFrame initializes here, adds the canvas, sets the size, makes it visible, and has it close the application if you close the window
         jFrame.add(panel);
         jFrame.setSize(SIZE, SIZE);
